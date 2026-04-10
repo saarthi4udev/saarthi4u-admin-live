@@ -1,6 +1,7 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import API from '../api/api';
 
 interface AuthContextType {
   user: User | null;
@@ -45,23 +46,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const { token } = response.data;
 
-      // ✅ Set default header for all requests
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // ✅ Save token FIRST so the API interceptor can read it
+      localStorage.setItem("token", token);
 
-      const userResponse = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`,{
-          withCredentials: true,
-        }
-      );
+      // ✅ Now use your configured API instance (interceptor will attach the token)
+      const userResponse = await API.get("/api/auth/profile");
 
       const user = userResponse.data;
 
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", token);
 
     } catch (error) {
       console.error("Login error:", error);
+      // Also consider re-throwing so callers can handle it
+      throw error;
     } finally {
       setIsLoading(false);
     }
