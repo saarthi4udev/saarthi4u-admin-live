@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       const userResponse = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/profile`,{
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`,{
           withCredentials: true,
         }
       );
