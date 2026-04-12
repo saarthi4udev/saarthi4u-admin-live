@@ -6,10 +6,23 @@ const AllCategories = () => {
   const [data, setData] = useState<any[]>([]);
   const [dupData, setDupData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+
+  const paginatedData = data.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   const loadCategories = async () => {
     const res = await getAllCategories();
@@ -74,19 +87,19 @@ const AllCategories = () => {
             </thead>
 
             <tbody>
-              {data.length === 0 ? (
+              {paginatedData.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-sm text-body">
                     No categories found
                   </td>
                 </tr>
               ) : (
-                data.map((category: any, index: number) => (
+                paginatedData.map((category: any, index: number) => (
 
                   <tr className="hover:bg-gray-2/30 dark:hover:bg-meta-4/30" key={category.id}>
                     <td className="admin-table-td pl-8">
                       <h5 className="font-medium text-black dark:text-white">
-                        {index + 1}
+                        {(currentPage - 1) * rowsPerPage + index + 1}
                       </h5>
                     </td>
 
@@ -124,6 +137,56 @@ const AllCategories = () => {
               )}
             </tbody>
           </table>
+          <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
+            <div className="text-sm text-body">
+              Page {currentPage} of {totalPages || 1}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .slice(Math.max(0, currentPage - 3), currentPage + 2)
+                .map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded ${currentPage === page ? "bg-primary text-white" : "bg-gray-2"
+                      }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
+            </div>
+
+            <select
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="admin-input"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
         </div>
       </div>
     </>

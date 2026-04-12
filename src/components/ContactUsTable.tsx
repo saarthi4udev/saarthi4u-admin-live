@@ -5,6 +5,9 @@ import toast from 'react-hot-toast';
 const ContactUsTable = () => {
   const [data, setData] = React.useState([]);
   const [dupdata, setdupdata] = React.useState([]);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   React.useEffect(() => {
     const fetchData = async () => {
       const result = await getAllContactUs();
@@ -19,13 +22,24 @@ const ContactUsTable = () => {
     fetchData();
   }, []);
 
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
+
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+
+  const paginatedData = data.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   const handleChange = (query: string) => {
     if (query.length == 1) {
       setData(dupdata);
       return;
     }
-    const filteredData = data.filter((item: any) =>
-      item.message.toLowerCase().includes(query.toLowerCase()),
+    const filteredData = dupdata.filter((item: any) =>
+      item.message.toLowerCase().includes(query.toLowerCase())
     );
     setData(filteredData);
   };
@@ -71,12 +85,12 @@ const ContactUsTable = () => {
               </tr>
             </thead>
             <tbody>
-              {data.length == 0 ? (
+              {paginatedData.length == 0 ? (
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-sm text-body">No data available</td>
                 </tr>
               ) : (
-                data.length > 0 &&
+                paginatedData.length > 0 &&
                 data.map((user: any, index: any) => (
                   <tr key={index} className="hover:bg-gray-2/30 dark:hover:bg-meta-4/30">
                     <td className="admin-table-td xl:pl-8">
@@ -108,6 +122,56 @@ const ContactUsTable = () => {
               )}
             </tbody>
           </table>
+          <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
+            <div className="text-sm text-body">
+              Page {currentPage} of {totalPages || 1}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .slice(Math.max(0, currentPage - 3), currentPage + 2)
+                .map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded ${currentPage === page ? "bg-primary text-white" : "bg-gray-2"
+                      }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
+            </div>
+
+            <select
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="admin-input"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
         </div>
       </div>
     </>

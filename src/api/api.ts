@@ -233,3 +233,9 @@ export const updateEducationalPartner = (id: any, data: any) =>
   });
 export const deleteEducationalPartner = (id: any) =>
   API.delete(`/api/partner/delete/${id}`);
+
+//Online Consultation 
+export const getAllConsultants = (page = 1, limit = 10) =>
+  API.get(`/api/consultation/all?page=${page}&limit=${limit}`).then(res => res.data);
+export const deleteConsultant = (id: any) =>
+  API.delete(`/api/consultation/delete/${id}`);

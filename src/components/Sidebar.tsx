@@ -200,6 +200,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </li>
 
             <li>
+              <NavLink exact to="/contact-us" onClick={closeOnMobile} className={baseNavItemClass} activeClassName={activeNavItemClass}>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.25 4.5C2.25 3.87868 2.75368 3.375 3.375 3.375H14.625C15.2463 3.375 15.75 3.87868 15.75 4.5V13.5C15.75 14.1213 15.2463 14.625 14.625 14.625H3.375C2.75368 14.625 2.25 14.1213 2.25 13.5V4.5Z" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M3 5.25L9 9.375L15 5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                Contact Us
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink exact to="/online" onClick={closeOnMobile} className={baseNavItemClass} activeClassName={activeNavItemClass}>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.25 4.5C2.25 3.87868 2.75368 3.375 3.375 3.375H14.625C15.2463 3.375 15.75 3.87868 15.75 4.5V13.5C15.75 14.1213 15.2463 14.625 14.625 14.625H3.375C2.75368 14.625 2.25 14.1213 2.25 13.5V4.5Z" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M3 5.25L9 9.375L15 5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                Online Consultation Data
+              </NavLink>
+            </li>
+            <li>
               <button
                 type="button"
                 onClick={() => setUsersOpen((prev) => !prev)}
@@ -508,18 +531,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </li>
 
             <li>
-              <NavLink exact to="/contact-us" onClick={closeOnMobile} className={baseNavItemClass} activeClassName={activeNavItemClass}>
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.25 4.5C2.25 3.87868 2.75368 3.375 3.375 3.375H14.625C15.2463 3.375 15.75 3.87868 15.75 4.5V13.5C15.75 14.1213 15.2463 14.625 14.625 14.625H3.375C2.75368 14.625 2.25 14.1213 2.25 13.5V4.5Z" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M3 5.25L9 9.375L15 5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-                Contact Us
-              </NavLink>
-            </li>
-
-            <li>
               <button
                 type="button"
                 onClick={() => setProfessorsOpen((prev) => !prev)}
@@ -572,8 +583,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <span className="flex items-center gap-3">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2 13c0-2.21 3.58-4 8-4s8 1.79 8 4v1H2v-1zm8-5a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor" opacity=".4"/>
-                      <path d="M14.5 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 1c-1.5 0-2.84.5-3.86 1.32C11.57 9.11 12.74 9 14 9c2.48 0 4.56.88 5.8 2.18A3.98 3.98 0 0 0 20 10c0-1.1-2.46-2-5.5-2z" fill="currentColor"/>
+                      <path d="M2 13c0-2.21 3.58-4 8-4s8 1.79 8 4v1H2v-1zm8-5a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor" opacity=".4" />
+                      <path d="M14.5 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 1c-1.5 0-2.84.5-3.86 1.32C11.57 9.11 12.74 9 14 9c2.48 0 4.56.88 5.8 2.18A3.98 3.98 0 0 0 20 10c0-1.1-2.46-2-5.5-2z" fill="currentColor" />
                     </svg>
                   </span>
                   Educational Partners
@@ -614,7 +625,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <span className="flex items-center gap-3">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M7.5 8.25h9m-9 3H12m-8.25-5.25A2.25 2.25 0 0 1 6 3.75h12a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H9l-4.5 4.5V6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M7.5 8.25h9m-9 3H12m-8.25-5.25A2.25 2.25 0 0 1 6 3.75h12a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H9l-4.5 4.5V6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
                   Testimonials

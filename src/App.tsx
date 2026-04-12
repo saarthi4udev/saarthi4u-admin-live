@@ -40,6 +40,7 @@ import EditPartnerLayout from './layout/partner/EditPartnerLayout';
 import AddTestimonialLayout from './layout/testimonial/AddTestimonialLayout';
 import AllTestimonialsLayout from './layout/testimonial/AllTestimonialsLayout';
 import EditTestimonialLayout from './layout/testimonial/EditTestimonialLayout';
+import OnlineConsultationLayout from './layout/OnlineConsultationLayout';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -260,6 +261,12 @@ function App() {
           exact
           path="/testimonials"
           component={AllTestimonialsLayout}
+          allowedRoles={['super', 'admin']}
+        />
+        <ProtectedRoute
+          exact
+          path="/online"
+          component={OnlineConsultationLayout}
           allowedRoles={['super', 'admin']}
         />
         {/* for undefined routed */}

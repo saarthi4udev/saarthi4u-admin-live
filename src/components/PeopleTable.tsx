@@ -31,6 +31,8 @@ const PeopleTable = ({ fetchAction }: PeopleTableProps) => {
   const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<UserRecord | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -44,6 +46,8 @@ const PeopleTable = ({ fetchAction }: PeopleTableProps) => {
       setIsLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     fetchData();
@@ -91,21 +95,32 @@ const PeopleTable = ({ fetchAction }: PeopleTableProps) => {
   const userCount = records.filter((item) => (item.role || '').toLowerCase() === 'user').length;
   const activeCount = records.filter((item) => item.isActive).length;
 
+  const totalPages = Math.ceil(visibleRows.length / rowsPerPage);
+
+  const paginatedRows = useMemo(() => {
+    const start = (currentPage - 1) * rowsPerPage;
+    return visibleRows.slice(start, start + rowsPerPage);
+  }, [visibleRows, currentPage, rowsPerPage]);
+
   const mappedSelected = selectedRecord
     ? {
-        name: selectedRecord.name || 'N/A',
-        email: selectedRecord.email || 'N/A',
-        phone: selectedRecord.phone || selectedRecord.phoneNo || 'N/A',
-        role: selectedRecord.role || 'N/A',
-        authProvider: selectedRecord.authProvider || selectedRecord.loginProvider || 'N/A',
-        address: selectedRecord.address || 'N/A',
-        isActive: selectedRecord.isActive ? 'Active' : 'Inactive',
-        dateOfJoining: selectedRecord.dateOfJoining || 'N/A',
-        updatedAt: selectedRecord.updatedAt
-          ? new Date(selectedRecord.updatedAt).toLocaleString()
-          : 'N/A',
-      }
+      name: selectedRecord.name || 'N/A',
+      email: selectedRecord.email || 'N/A',
+      phone: selectedRecord.phone || selectedRecord.phoneNo || 'N/A',
+      role: selectedRecord.role || 'N/A',
+      authProvider: selectedRecord.authProvider || selectedRecord.loginProvider || 'N/A',
+      address: selectedRecord.address || 'N/A',
+      isActive: selectedRecord.isActive ? 'Active' : 'Inactive',
+      dateOfJoining: selectedRecord.dateOfJoining || 'N/A',
+      updatedAt: selectedRecord.updatedAt
+        ? new Date(selectedRecord.updatedAt).toLocaleString()
+        : 'N/A',
+    }
     : null;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, roleFilter]);
 
   return (
     <>
@@ -174,14 +189,14 @@ const PeopleTable = ({ fetchAction }: PeopleTableProps) => {
               </tr>
             </thead>
             <tbody>
-              {visibleRows.length === 0 ? (
+              {paginatedRows.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-sm text-body">
                     No records found
                   </td>
                 </tr>
               ) : (
-                visibleRows.map((record) => (
+                paginatedRows.map((record) => (
                   <tr key={record.id} className="hover:bg-gray-2/30 dark:hover:bg-meta-4/30">
                     <td className="admin-table-td xl:pl-8">
                       <h5 className="font-medium text-black dark:text-white">{record.name || 'N/A'}</h5>
@@ -221,6 +236,57 @@ const PeopleTable = ({ fetchAction }: PeopleTableProps) => {
               )}
             </tbody>
           </table>
+          <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
+            <div className="text-sm text-body">
+              Page {currentPage} of {totalPages || 1}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Prev
+              </button>
+
+              {[...Array(totalPages)].map((_, index) => {
+                const page = index + 1;
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded ${currentPage === page ? 'bg-primary text-white' : 'bg-gray-2'
+                      }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+
+              <button
+                className="admin-btn-outline"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
+            </div>
+
+            <select
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="admin-input"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
         </div>
       </div>
 
